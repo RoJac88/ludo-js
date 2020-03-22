@@ -57,16 +57,50 @@ form {
 }
 
 .game-info {
+  overflow: visible;
   border: 2px solid rgb(8, 8, 8);
   border-radius: 5%;
   background-color: rgb(8, 8, 8);
-  width: 25%;
+  width: 25vw;
   height: 480px;
   color: whitesmoke;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
   padding-left: 12px;
   padding-right: 12px;
+}
+
+.p-container {
+  display: grid;
+  overflow: hidden;
+  grid-template-columns: 1fr max-content;
+}
+
+#players {
+  grid-column: 1 / 1;
+  margin-top: 0.3em;
+}
+
+.move-score-container {
+  display: none;
+  grid-column: 2 / 2;
+  padding: 4px;
+  border-radius: 5px;
+  font-size: small;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  border-style: solid;
+  border-width: 2px;
+  border-color: whitesmoke;
+  color: whitesmoke;
+}
+
+.move-title {
+  height: 33%;
+}
+
+#move-score {
+  text-align: center;
+  font-size: 32px;
 }
 
 #show-coordinates {
@@ -77,6 +111,10 @@ form {
 }
 
 #status {
+  grid-column: 1 / span 2;
+  height: fit-content;
+  overflow: visible;
+  max-width: 95%;
   font-size: small;
   margin-top: 1.2em;
 }
@@ -85,7 +123,7 @@ form {
   font-size: x-large;
   text-align: center;
   margin-top: 0.5em;
-  margin-bottom: 1em;
+  margin-bottom: 0.6em;
 }
 
 .score {
