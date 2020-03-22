@@ -140,11 +140,11 @@ function tokensInRange(token) {
   let _t = {...token};
   for (let i = 1; i < 7; i++) {
     _t.steps -= 1;
-    if (_t.steps < -1) {
-      _t.steps = 52;
+    if (_t.steps < -0) {
+      _t.steps = 51;
     }
     let collision = checkKill(_t);
-    if (collision && collision.steps + i <= 52) {
+    if (collision && collision.steps + i <= 51) {
       distances.push(i);
       }
   }
@@ -171,9 +171,9 @@ function nextMove() {
   if (players[currentPlayer].bot) {
     let timeout;
     if (players[currentPlayer].name === 'RANDOM') {
-      timeout = 200;
+      timeout = 600;
     } else {
-      timeout = 800;
+      timeout = 1200;
     }
     setTimeout(() => {
       clickDice();
@@ -283,6 +283,28 @@ function openTokenSelection(n) {
   button.style.display = 'block';
 }
 
+function updateMoveScore(score, color) {
+  if (!color) {
+    color = 'white';
+  }
+  const moveContainer = document.getElementsByClassName('move-score-container')[0];
+  const moveTitle = document.getElementsByClassName('move-title')[0];
+  const moveScore = document.getElementById('move-score');
+  moveTitle.style.color = color;
+  moveScore.innerText = score;
+  moveContainer.style.borderColor = color;
+  if (color === 'green') {
+    moveContainer.style.backgroundColor = 'whitesmoke';
+  } else {
+    moveContainer.style.backgroundColor = 'rgba(8 ,8 ,8, 0)';
+  }
+  moveScore.style.color = color;
+  if (moveContainer.style.display !== 'initial') {
+    moveContainer.style.display = 'initial';
+  }
+  console.log(moveContainer.style.display);
+}
+
 function inputMove(i) {
   stopDrawDestination();
   let player = players[currentPlayer];
@@ -362,10 +384,10 @@ function clickDice() {
         }
       })
     if (players[currentPlayer].name === 'RANDOM') {
-      timeout = 400;
+      timeout = 600;
     } else {
       if (moveTokenButtons.length > 1) {
-        timeout = 2000;
+        timeout = 1000;
       } else {
         timeout = 800;
       }
@@ -587,12 +609,13 @@ class Player {
     })
   }
   hasTokensHome() {
+    let r = false;
     this.tokens.forEach((t) => {
       if (t.steps == -1) {
-        return true;
+        r = true;
       }
     })
-    return false;
+    return r;
   }
   pickToken() {
     let moveTokenButtons = [];
@@ -605,7 +628,7 @@ class Player {
     let pick;
     if (this.name !== 'RANDOM') {
       const safety = 10;
-      const killBonus = 200;
+      const killBonus = 300;
       const baseDistanceBonus = safety * 10;
       if (moveTokenButtons.length > 0) {
         let movableTokens = moveTokenButtons.map((b) => {
@@ -615,13 +638,14 @@ class Player {
         })
         let moveScores = [];
         const d = gameDice;
+        console.log(`Turn: ${turn}: ${this.color} rolls ${d}`);
         for (let id = 0; id < movableTokens.length; id++) {
           const _token = { ...movableTokens[id] };
           let score = 0;
           const s = _token.steps;
-          let ds = tokensInRange(_token);
-          if (ds.length > 0) {
-            ds.forEach((distance) => {
+          const previousDs = tokensInRange(_token);
+          if (previousDs.length > 0) {
+            previousDs.forEach((distance) => {
               score += baseDistanceBonus;
               score += (7 - distance) * safety;
             })
@@ -638,48 +662,63 @@ class Player {
           if (s > 52) {
             score = (s - 52) * (safety * -1) + 1; // inside safe zone
           }
-          if (s == 18 || s == 31 || s == 44) {
-            score += baseDistanceBonus + safety; // can get killed by 6.
+          const oldSq = _token.path[_token.steps];
+          if (oldSq) {
+            players.forEach((p) => {
+              // Check if square six is dangerous.
+              if (p.color !== _token.color && p.hasTokensHome()) {
+                if (p.color === 'green' && oldSq === '6') {
+                  score -= baseDistanceBonus + safety;
+                }
+                if (p.color === 'yelow' && oldSq === '19') {
+                  score -= baseDistanceBonus + safety;
+                }
+                if (p.color === 'blue' && oldSq === '32') {
+                  score -= baseDistanceBonus + safety;
+                }
+                if (p.color === 'red' && oldSq === '45') {
+                  score -= baseDistanceBonus + safety;
+                }
+              }
+            })
           }
           _token.steps += d; // Simulate token movement.
-          const sq = _token.path[_token.square];
+          let victim = checkKill(_token);
+          if (victim) {
+            if (victim.player.bot && victim.player.name !== 'RANDOM') {
+              score -= victim.player.stepsWalked+4;
+              score -= victim.steps/10;
+              score -= killBonus*1.5;
+            } else {
+              score += victim.player.stepsWalked+4;
+              score += victim.steps/10;
+              score += killBonus;
+            }
+          }
+          const newSq = _token.path[_token.steps];
           players.forEach((p) => {
             // Check if square six is dangerous.
             if (p.color !== _token.color && p.hasTokensHome()) {
-              if (p.color === 'green' && sq === '6') {
+              if (p.color === 'green' && newSq === '6') {
                 score -= baseDistanceBonus + safety;
               }
-              if (p.color === 'yelow' && sq === '19') {
+              if (p.color === 'yelow' && newSq === '19') {
                 score -= baseDistanceBonus + safety;
               }
-              if (p.color === 'blue' && sq === '32') {
+              if (p.color === 'blue' && newSq === '32') {
                 score -= baseDistanceBonus + safety;
               }
-              if (p.color === 'red' && sq === '45') {
+              if (p.color === 'red' && newSq === '45') {
                 score -= baseDistanceBonus + safety;
               }
             }
           })
-          ds = tokensInRange(_token);
-          if (ds.length > 0) {
-            ds.forEach((distance) => {
+          const nextDs = tokensInRange(_token);
+          if (nextDs.length > 0) {
+            nextDs.forEach((distance) => {
               score -= baseDistanceBonus;
               score -= (7 - distance) * safety;
             })
-          }
-          let victim = checkKill(_token);
-          if (victim) {
-            if (victim.player.bot && victim.player.name !== 'RANDOM') {
-              score -= (victim.player.stepsWalked+4);
-              score -= (victim.steps/10);
-              score -= killBonus;
-            } else {
-              let bonus = 0;
-              bonus += (victim.player.stepsWalked+4);
-              bonus += (victim.steps/10);
-              console.log(`Kill bonus: ${killBonus} + ${bonus}`);
-              score += bonus + killBonus;
-            }
           }
           moveScores.push({
             'id': id,
@@ -696,10 +735,8 @@ class Player {
           return 0;
         })
         pick = moveScores[0]['id'];
-        console.log(`Turn ${turn}: ${this.color} moveScores:`);
-        moveScores.forEach((m) => {
-          console.log(`move-${(m.num)}: ${m.score}`);
-        })
+        const moveSc = moveScores[0].score;
+        updateMoveScore(moveSc, this.color);
       }
     } else {
       pick = getRandomInt(0, moveTokenButtons.length-1);
@@ -709,12 +746,12 @@ class Player {
     startDrawDestination(n);
     let timeout;
     if (this.name === 'RANDOM') {
-      timeout = 200;
+      timeout = 400;
     } else {
       if (moveTokenButtons.length > 1) {
-        timeout = 3200;
+        timeout = 2400;
       } else {
-        timeout = 400;
+        timeout = 800;
       }
     }
     setTimeout(() => {
