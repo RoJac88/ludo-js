@@ -302,7 +302,6 @@ function updateMoveScore(score, color) {
   if (moveContainer.style.display !== 'initial') {
     moveContainer.style.display = 'initial';
   }
-  console.log(moveContainer.style.display);
 }
 
 function inputMove(i) {
