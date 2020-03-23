@@ -1,7 +1,7 @@
 #game-form {
   position: absolute;
-  left: 2vw;
-  top: 48px;
+  left: 8%;
+  top: 10%;
   padding: 12px;
   border: 5px solid rgba(8, 8, 8, 0.8);
   font-family: 'Courier New', Courier, monospace;
@@ -103,11 +103,9 @@ form {
   font-size: 32px;
 }
 
-#show-coordinates {
-  margin-left: 66vw;
-  margin-top: 2px;
-  font-weight: bolder;
-  font-family: 'Courier New', Courier, monospace;
+.settings {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  margin-left: 75vw;
 }
 
 #status {

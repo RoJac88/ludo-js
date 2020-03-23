@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="adjustCanvas()" onresize="adjustCanvas()">
+  <body onload="main()">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -39,11 +39,11 @@
             <img id="d6" class="d" style="display: none;" src="img/d6.png" />
           </div>
         </div>
-        <button id="roll" onclick="clickDice()">ROLL DICE</button>
-        <button disabled class="mover" id="move-1" onclick="inputMove(0)" onmouseover="startDrawDestination(0)" onmouseout="stopDrawDestination()">MOVE 1</button>
-        <button disabled class="mover" id="move-2" onclick="inputMove(1)" onmouseover="startDrawDestination(1)" onmouseout="stopDrawDestination()">MOVE 2</button>
-        <button disabled class="mover" id="move-3" onclick="inputMove(2)" onmouseover="startDrawDestination(2)" onmouseout="stopDrawDestination()">MOVE 3</button>
-        <button disabled class="mover" id="move-4" onclick="inputMove(3)" onmouseover="startDrawDestination(3)" onmouseout="stopDrawDestination()">MOVE 4</button>
+        <button disabled id="roll">ROLL DICE</button>
+        <button disabled class="mover" id="move-1">MOVE 1</button>
+        <button disabled class="mover" id="move-2">MOVE 2</button>
+        <button disabled class="mover" id="move-3">MOVE 3</button>
+        <button disabled class="mover" id="move-4">MOVE 4</button>
       </div>
       <div class="board">
         <div class="home-section">
@@ -168,60 +168,60 @@
         </div>
       </div>
     </div>
-    <div id="show-coordinates">
-      <input type="checkbox" name="show-coordinates" onchange="toggleSquares()">
+    <div class="settings">
+      <input type="checkbox" name="show-coordinates" id="show-coordinates">
       <label for="show-coordinates">Square numbers</label>
     </div>
     <div id="game-form">
       <div style="text-align: center; font-weight: bold; font-size: larger;">New Game: </div>
-      <form onsubmit="formSubmit(event)">
+      <form>
         <div id="p1-form">
           <h2 id="p1-h" class="score-green">Player 1:</h2>
           <label for="p1-color">Color: </label>
-          <select id="p1-color" oninput="updateForm(0)">
+          <select id="p1-color">
             <option value="red">Red</option>
             <option selected value="green">Green</option>
             <option value="blue">Blue</option>
             <option value="yellow">Yellow</option>
           </select><br>
           <label for="p1-name">Name: </label>
-          <input id="p1-name" size="15" type="text" name="p1-name" placeholder="Player 1" oninput="updateForm(0)">
+          <input id="p1-name" size="15" type="text" name="p1-name" placeholder="Player 1">
         </div>
         <div id="p2-form">
           <h2 id="p2-h" class="score-yellow">Player 2:</h2>
           <label for="p2-color">Color: </label>
-          <select id="p2-color"  onchange="updateForm(1)">
+          <select id="p2-color">
             <option value="red">Red</option>
             <option value="green">Green</option>
             <option value="blue">Blue</option>
             <option selected value="yellow">Yellow</option>
           </select><br>
           <label for="p2-name">Name: </label>
-          <input id="p2-name" size="15" type="text" name="p2-name" placeholder="Player 2" value="RANDOM" oninput="updateForm(1)">
+          <input id="p2-name" size="15" type="text" name="p2-name" placeholder="Player 2" value="RANDOM">
         </div>
         <div id="p3-form">
           <h2 id="p3-h" class="score-blue">Player 3:</h2>
           <label for="p3-color">Color: </label>
-          <select id="p3-color" onchange="updateForm(2)">
+          <select id="p3-color">
             <option value="red">Red</option>
             <option value="green">Green</option>
             <option selected value="blue">Blue</option>
             <option value="yellow">Yellow</option>
           </select><br>
           <label for="p3-name">Name: </label>
-          <input id="p3-name" size="15" type="text" name="p3-name" placeholder="Player 3" value="RANDOM" oninput="updateForm(2)">
+          <input id="p3-name" size="15" type="text" name="p3-name" placeholder="Player 3" value="RANDOM">
         </div>
         <div id="p4-form">
           <h2 id="p4-h" class="score-red">Player 4:</h2>
           <label for="p4-color">Color: </label>
-          <select id="p4-color" onchange="updateForm(3)">
+          <select id="p4-color">
             <option selected value="red">Red</option>
             <option value="green">Green</option>
             <option value="blue">Blue</option>
             <option value="yellow">Yellow</option>
           </select><br>
           <label for="p4-name">Name: </label>
-          <input id="p4-name" size="15" type="text" name="p4-name" placeholder="Player 4" value="HAL" oninput="updateForm(3)">
+          <input id="p4-name" size="15" type="text" name="p4-name" placeholder="Player 4" value="HAL">
         </div>
         <div id="submit">
           <input id="start" type="submit" value="Start Game!" disabled>
