@@ -820,7 +820,7 @@ class Bot extends Player {
         _token.steps += d; // Simulate token movement.
         const victim = this.game.checkKill(_token);
         if (victim) {
-          if (victim.player.bot && victim.constructor !== this.constructor) {
+          if (victim instanceof Bot) {
             score -= victim.player.stepsWalked+4;
             score -= victim.steps/10;
             score -= this.killBonus*1.5;
