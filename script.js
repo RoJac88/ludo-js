@@ -146,6 +146,7 @@ class Page {
     this.players.push(player);
     this.playerScores[color] = points;
     this.playersContainer.appendChild(player);
+    this.updatePlayerScore(color, 0);
   };
 
   updatePlayerScore(color, score) {
@@ -725,14 +726,15 @@ class Random extends Player {
     this.clickTimeout = 400;
     this.diceTimeout = 400;
     this.pickTimeout = 800;
-  }
+  };
+
   pickToken() {
     let moveTokenButtons = [];
     this.game.page.moveButtons.forEach((b) => {
       if (b.style.display !== 'none') {
         moveTokenButtons.push(b);
       }
-    })
+    });
     let pick = this.game.getRandomInt(0, moveTokenButtons.length - 1);
     moveTokenButtons[pick].classList.add('bot-select');
     let n = parseInt(moveTokenButtons[pick].id.charAt(5) - 1);
