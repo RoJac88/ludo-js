@@ -20,6 +20,6 @@ These are the rules implemented in the game. They may or may not be 100% accurat
  ## How to play
 To play the game enter a player name in the starting form. 
 
-Bots are any players named BOT, HAL or RANDOM. Bots named RANDOM pick tokens randomdly (mind = blown) and play at a faster pace. Players with any other name are considered human players. 
+Bots are any players named BOT, HAL or RANDOM. Bots named RANDOM pick tokens randomly (mind = blown) and play at a faster pace. Players with any other name are considered human players. 
 
 It is possible to intercept the move of any BOT by clicking the button before the BOT does. 
