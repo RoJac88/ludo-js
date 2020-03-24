@@ -38,7 +38,7 @@ class Page {
       event.preventDefault();
       this.formSubmit();
     });
-  }
+  };
 
   formValid() {
     let n_players = 0;
@@ -922,8 +922,8 @@ function loadPage() {
     pageConfig.dice.push(document.getElementById(`d${i}`));
   }
   return new Page(pageConfig);
-}
+};
 
 function main() {
   page = loadPage();
-}
+};
