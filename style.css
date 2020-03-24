@@ -176,6 +176,7 @@ button {
 
 .bot-select {
   background-color: whitesmoke;
+  opacity: 0.8;
   color: rgb(8, 8, 8);
 }
 
